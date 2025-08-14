@@ -34,10 +34,10 @@ might run out of time for requirements marked with a star
 
 ## Week 2 simple wireframe
 ---
-![Coulour pallet](colour_pallet_cpt.png)
+![Coulour pallet](images/colour_pallet_cpt.png)
 This is going to be my prefered colour scheme for my website
 
-![paper wireframe](Wireframe.png)
+![paper wireframe](images/Wireframe.png)
 This was my first wireframe that I drew on paper
 
 I will be using a basic font such as a thick roboto for my subheadings, I would use a  thinner version for the user input appearing on the screen.
@@ -49,7 +49,7 @@ I will use images mainly as icons to show the user what they are buying so that 
 [Interactive Figma WIreframe](https://www.figma.com/proto/OnFVapV77fbgHP9KciOt3H/Wireframe-7KM?node-id=0-1&t=n5xVGcwnucpyeyWG-1)
 
 ### Logo
-![Logo](BG removed Logo.png)
+![Logo](images/BG removed Logo.png)
 
 My prompt to get the Logo from Copilot AI:
 Can you make a logo for a  hardware store called 7KM in which the 7 looks like an impact drill. Can the main colours be 8D4F42 and the secondary colour be 6C7D42. can the outline be 0C0C0C and have a little bit of 38305F and F5F5F5
@@ -80,7 +80,7 @@ Sent to a thank you for shopping with us page
 If declined
 The user gets sent back to the checkout page with the information still filled out so that if there were any mistakes made in the process they can be fixed
 
-![Flowchart](algorithm_flowchart.png)
+![Flowchart](images/algorithm_flowchart.png)
 
 **Flowchart analysation**
 
@@ -93,6 +93,7 @@ My algorithm isn't overly complicated so it should scale well as the business gr
 
 **Test cases**
 
+Test Case ID: TC-01
 Test Cases: Test cart functionality
 Preconditions: User must have a registered account and be logged in to their account, or they can be logged out but they can’t close their tab
 Test Steps:
@@ -105,6 +106,7 @@ Actual Result: To be filled after execution.
 Pass/Fail: To be filled after execution.
 Priority: High
 
+Test Case ID: TC-02
 Test Cases: Test payment methods
 Preconditions: User must have a cart with items and correct and and valid information
 Test Steps:
