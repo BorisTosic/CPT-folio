@@ -34,7 +34,7 @@ might run out of time for requirements marked with a star
 
 ## Week 2 simple wireframe
 ---
-![Coulour pallet](images/colour_pallet_cpt.png)
+![Colour pallet](images/colour_pallet_cpt.png)
 This is going to be my prefered colour scheme for my website
 
 ![paper wireframe](images/Wireframe.png)
@@ -49,7 +49,7 @@ I will use images mainly as icons to show the user what they are buying so that 
 [Interactive Figma WIreframe](https://www.figma.com/proto/OnFVapV77fbgHP9KciOt3H/Wireframe-7KM?node-id=0-1&t=n5xVGcwnucpyeyWG-1)
 
 ### Logo
-![Logo](images/BG removed Logo.png)
+![Logo](images/Logo.png)
 
 My prompt to get the Logo from Copilot AI:
 Can you make a logo for a  hardware store called 7KM in which the 7 looks like an impact drill. Can the main colours be 8D4F42 and the secondary colour be 6C7D42. can the outline be 0C0C0C and have a little bit of 38305F and F5F5F5
