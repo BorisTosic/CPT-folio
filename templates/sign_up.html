@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <div class="banner">
+        <img src="static/images/BG_Logo.png" alt="Website Logo" class="banner-image">
+    </div>
+    <div class="banner-buttons">
+      <a href="index.html" class="banner-btn">Home</a>
+      <a href="#about" class="banner-btn">Products</a>
+      <a href="sign_in.html" class="banner-btn">Sign in</a>
+    </div>
+
+    <!-- 🔹 NEW SIGN-UP FORM START -->
+    <div class="sign-up-container">
+        <h2>Create an Account</h2>
+        <form action="/signup" method="POST">
+            <!-- First and Last Name -->
+            <input type="text" name="first_name" placeholder="First Name" required>
+            <input type="text" name="last_name" placeholder="Last Name" required>
+
+            <!-- Phone & Password -->
+            <input type="tel" name="phone" placeholder="Phone Number" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <!-- Address Fields -->
+            <input type="text" name="street_number" placeholder="Street Number" required>
+            <input type="text" name="street_name" placeholder="Street Name" required>
+            <input type="text" name="street_suffix" placeholder="Street Suffix (e.g. St, Rd, Ave)" required>
+            <input type="text" name="suburb" placeholder="Suburb" required>
+
+            <!-- Australian States & Territories Dropdown -->
+            <select name="state" required>
+                <option value="" disabled selected>Select State/Territory</option>
+                <option value="NSW">New South Wales</option>
+                <option value="VIC">Victoria</option>
+                <option value="QLD">Queensland</option>
+                <option value="WA">Western Australia</option>
+                <option value="SA">South Australia</option>
+                <option value="TAS">Tasmania</option>
+                <option value="ACT">Australian Capital Territory</option>
+                <option value="NT">Northern Territory</option>
+                <option value="Other">Other territories</option>
+            </select>
+
+            <!-- Submit Button -->
+            <button type="submit">Sign Up</button>
+        </form>
+
+        <!-- Link Back to Sign In -->
+        <p>Already have an account? <a href="sign_in.html">Sign in here</a></p>
+</body>
+</html>
