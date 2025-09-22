@@ -13,7 +13,12 @@
     <div class="banner-buttons">
       <a href="#home" class="banner-btn">Home</a>
       <a href="#about" class="banner-btn">About</a>
-      <a href="sign_in.html" class="banner-btn">Sign in</a>
+        {% if first_name %}
+    <span class="welcome-text">Welcome, {{ first_name }}!</span>
+    <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
+  {% else %}
+    <a href="sign_in.html" class="banner-btn">Sign in</a>
+  {% endif %}
     </div>
     <div style="text-align: center; margin-top: 20px;">
         <iframe 
