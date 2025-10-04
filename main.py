@@ -41,7 +41,19 @@ def get_first_name(phone):
 
 @app.route("/")
 def home():
-    return render_template("index.html", first_name=session.get("first_name"))
+    conn = sqlite3.connect("database/data_source.db")
+    cursor = conn.cursor()
+    
+    # Grab up to 7 products that have images
+    cursor.execute("SELECT product_id, image FROM product_data WHERE image IS NOT NULL LIMIT 7")
+    products = cursor.fetchall()
+    conn.close()
+
+    return render_template(
+        "index.html", 
+        first_name=session.get("first_name"), 
+        products=products
+    )
 
 @app.route('/index.html', methods=['GET'])
 @app.route('/', methods=['POST', 'GET'])
@@ -63,6 +75,7 @@ def sign_in():
 def sign_up():
    return render_template('/sign_up.html', content='data')
 
+
 @app.route("/login", methods=["POST"])
 def login():
     phone = request.form["phone"]
@@ -73,8 +86,41 @@ def login():
         session["first_name"] = get_first_name(phone)  #store first name
         return redirect(url_for("home"))
     else:
-        return "Invalid login"
+        print ('invalid login')
 
+
+@app.route("/signup", methods=["POST"])
+def signup():
+    first_name = request.form["first_name"]
+    last_name = request.form["last_name"]
+    phone = request.form["phone"]
+    password = request.form["password"]
+    street_number = request.form["street_number"]
+    street_name = request.form["street_name"]
+    street_suffix = request.form["street_suffix"]
+    suburb = request.form["suburb"]
+    state = request.form["state"]
+
+    
+    conn = sqlite3.connect("database/data_source.db")
+    cursor = conn.cursor()
+    
+    cursor.execute("""
+        INSERT INTO Customer_Data 
+        (first_name, last_name, phone, password, street_number, street_name, street_suffix, suburb, state)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    """, (first_name, last_name, phone, password, street_number, street_name, street_suffix, suburb, state))
+
+    conn.commit()
+    conn.close()
+    
+
+    # Auto-login
+    session["phone"] = phone
+    session["first_name"] = first_name
+
+    flash("Account created successfully!", "success")
+    return redirect(url_for("home"))
 
 if __name__ == '__main__':
   app.run(debug=True, host='0.0.0.0', port=5000)

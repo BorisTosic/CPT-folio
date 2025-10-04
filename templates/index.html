@@ -6,6 +6,73 @@
     <title>Home</title>
   <link rel="stylesheet" href="static\css\style.css">
 </head>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const carousel = document.querySelector('.carousel');
+  const slides = Array.from(carousel.children);
+  const prevBtn = document.querySelector('.carousel-btn.prev');
+  const nextBtn = document.querySelector('.carousel-btn.next');
+
+  // Clone first and last slide for infinite loop
+  const firstClone = slides[0].cloneNode(true);
+  const lastClone = slides[slides.length - 1].cloneNode(true);
+  carousel.appendChild(firstClone);
+  carousel.insertBefore(lastClone, slides[0]);
+
+  const allSlides = Array.from(carousel.children);
+  let index = 1; // start on first "real" slide
+
+  const updateCarousel = () => {
+    const slideWidth = allSlides[0].getBoundingClientRect().width + 30; // width + margin
+    carousel.style.transform = `translateX(${-index * slideWidth + (carousel.parentElement.offsetWidth - slideWidth)/2}px)`;
+  };
+
+  // Initial position
+  updateCarousel();
+
+  const moveToSlide = (newIndex) => {
+    index = newIndex;
+    carousel.style.transition = "transform 0.5s ease";
+    updateCarousel();
+  };
+
+  nextBtn.addEventListener('click', () => {
+    if (index >= allSlides.length - 1) return;
+    moveToSlide(index + 1);
+  });
+
+  prevBtn.addEventListener('click', () => {
+    if (index <= 0) return;
+    moveToSlide(index - 1);
+  });
+
+  carousel.addEventListener('transitionend', () => {
+    if (allSlides[index].isSameNode(firstClone)) {
+      carousel.style.transition = "none";
+      index = 1;
+      updateCarousel();
+    }
+    if (allSlides[index].isSameNode(lastClone)) {
+      carousel.style.transition = "none";
+      index = allSlides.length - 2;
+      updateCarousel();
+    }
+  });
+
+  // Auto-scroll
+  let autoScroll = setInterval(() => {
+    moveToSlide(index + 1);
+  }, 3500);
+
+  // Pause on hover
+  carousel.parentElement.addEventListener('mouseenter', () => clearInterval(autoScroll));
+  carousel.parentElement.addEventListener('mouseleave', () => {
+    autoScroll = setInterval(() => moveToSlide(index + 1), 4000);
+  });
+
+  window.addEventListener('resize', updateCarousel);
+});
+</script>
 <body>
     <div class="banner">
         <img src="static/images/BG_Logo.png" alt="Website Logo" class="banner-image">
@@ -14,22 +81,29 @@
       <a href="#home" class="banner-btn">Home</a>
       <a href="#about" class="banner-btn">About</a>
         {% if first_name %}
-    <span class="welcome-text">Welcome, {{ first_name }}!</span>
+    <span class="banner-btn">Welcome, {{ first_name }}!</span>
     <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
   {% else %}
     <a href="sign_in.html" class="banner-btn">Sign in</a>
   {% endif %}
     </div>
-    <div style="text-align: center; margin-top: 20px;">
-        <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d21048.16866079327!2d150.9250260045757!3d-33.91667898009231!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6b1295e8c2bc1e89%3A0x587257995c5a76d!2sWarwick%20Farm!5e0!3m2!1sen!2sau!4v1757237497080!5m2!1sen!2sau" 
-            width="600" 
-            height="450" 
-            style="border:0;" 
-            allowfullscreen="" 
-            loading="lazy" 
-            referrerpolicy="no-referrer-when-downgrade">
-        </iframe>
+<!-- Product Carousel -->
+<div class="carousel-container">
+  <button class="carousel-btn prev">&#10094;</button>
+
+  <div class="carousel-viewport">
+    <div class="carousel">
+      {% for product in products %}
+      <div class="slide">
+        <a href="/product/{{ product[0] }}">
+          <img src="{{ product[1] }}" alt="Product {{ product[0] }}">
+        </a>
+      </div>
+      {% endfor %}
     </div>
+  </div>
+
+  <button class="carousel-btn next">&#10095;</button>
+</div>
 </body>
 </html>
