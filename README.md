@@ -129,3 +129,27 @@ My algorithm isn't overly complicated so it should scale well as the business gr
 **Pass/Fail:** To be filled after execution.<br>
 **Priority:** medium to high
 
+## Week 5 & 6
+- These two weeks I added my SQL database to my program 
+- I made three different tables: one had the customer data (name, phone number password and address information), one had the product data (id, price, brand, name, available stock), and order data that has (id, phone number of user, product_id, quantity and date)
+- I have used mockaroo to fill my database with sample data
+
+## Week 7
+- I Started coding my webpage
+- I have connected the code to the link that I can access on my computer to view my website
+
+## Week 8
+- I Added my home and sign in page
+- I added a banner at the top of each webpage that displays the logo
+- I added buttons just underneath the banner for the homepage, sign in page
+
+## Week 9
+- I added a link to my sign up page
+- I formatted my sign in and sign up page
+- I started to add my sign in function but my code is buggy
+
+## Week 10
+- I finally got my sign in function to work
+- I got the phone number and first name of the user save so the person was actually logged in
+- I got a welcome, (name of user) into my banner
+- I got a log out functionality
