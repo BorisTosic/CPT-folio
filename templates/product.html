@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ product.tool_name }} | {{ product.brand }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+    <div class="banner">
+        <img src="{{ url_for('static', filename='images/BG_Logo.png') }}" alt="Website Logo" class="banner-image">
+    </div>
+
+    <div class="banner-buttons">
+        <a href="/" class="banner-btn">Home</a>
+        <a href="#about" class="banner-btn">Products</a>
+        <a href="sign_in.html" class="banner-btn">Sign in</a>
+    </div>
+
+    <div class="product-container">
+        <div class="product-image">
+            <img src="{{ product.image }}" alt="{{ product.tool_name }}">
+        </div>
+
+        <div class="product-info">
+            <h1>{{ product.tool_name }}</h1>
+            <h2>Brand: {{ product.brand }}</h2>
+            <p><strong>Price:</strong> ${{ "%.2f"|format(product.price) }}</p>
+            <p><strong>Available:</strong> {{ product.amount_available }}</p>
+
+            <button class="buy-btn">Buy Now</button>
+        </div>
+    </div>
+
+</body>
+</html>

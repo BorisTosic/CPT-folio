@@ -122,6 +122,9 @@ nav h1 {
   text-align: justify;
   text-justify: inter-word;
 }
+
+/* banner stuff */
+
 .banner {
    background-color: #6C7C59;
    color: white;
@@ -133,7 +136,7 @@ nav h1 {
 }
 
 .banner-image {
-  max-width: 200px;  /* Adjust image size */
+  max-width: 200px;  /* Adjust image size, make image bigger or smaller */
   height: auto;      /* Maintain aspect ratio */
 }
 
@@ -363,3 +366,119 @@ nav h1 {
 
 .carousel-btn.prev { left: 10px; }
 .carousel-btn.next { right: 10px; }
+
+/* Product Page*/
+.product-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px;
+    gap: 50px;
+}
+
+.product-image img {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.product-info {
+    max-width: 400px;
+}
+
+.product-info h1 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.product-info h2 {
+    font-size: 1.3rem;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.product-info p {
+    font-size: 1.1rem;
+    margin: 8px 0;
+}
+
+.buy-btn {
+    padding: 10px 25px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.buy-btn:hover {
+    background-color: #0056b3;
+}
+
+/* === BRANDS SECTION === */
+.brands-section {
+    display: flex;
+    width: 100%;
+    height: 300px;
+    margin-top: 50px;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.brand-half {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.4s ease, filter 0.3s ease, background 0.3s;
+    cursor: pointer;
+}
+
+.brand-half img {
+    width: 60%;
+    max-height: 120px;
+    object-fit: contain;
+}
+
+/* white logo for Milwaukee only */
+.brand-half.milwaukee img {
+    filter: brightness(0) invert(1);
+}
+
+/* Makita Side */
+.brand-half.makita {
+    background-color: #007DB8; /* Makita blue */
+}
+
+/* Milwaukee Side */
+.brand-half.milwaukee {
+    background-color: #C8102E; /* Milwaukee red */
+}
+
+/* Hover effect */
+.brand-half:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+/* Responsive adjustment */
+@media (max-width: 768px) {
+    .brands-section {
+        flex-direction: column;
+        height: auto;
+    }
+    .brand-half {
+        height: 200px;
+    }
+    .brand-half img {
+        width: 50%;
+    }
+}
+
+
+

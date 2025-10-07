@@ -23,6 +23,7 @@ def check_login(phone, password):
         return False
 
 
+
 def get_first_name(phone):
     conn = sqlite3.connect("database/data_source.db")
     cursor = conn.cursor()
@@ -59,6 +60,89 @@ def home():
 @app.route('/', methods=['POST', 'GET'])
 def index():
    return render_template('/index.html', first_name=session.get("first_name"))
+
+# Product Page
+@app.route("/product/<int:product_id>")
+def product_page(product_id):
+    conn = sqlite3.connect("database/data_source.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT product_id, brand, tool_name, price, amount_available, image
+        FROM product_data
+        WHERE product_id = ?
+    """, (product_id,))
+    
+    product = cursor.fetchone()
+    conn.close()
+
+    if not product:
+        return f"<h1>Product {product_id} not found.</h1>", 404
+
+    # Convert tuple to dictionary for easier use in HTML
+    product_info = {
+        "product_id": product[0],
+        "brand": product[1],
+        "tool_name": product[2],
+        "price": float(product[3]),  # turns into float
+        "amount_available": product[4],
+        "image": product[5]
+    }
+
+    return render_template("product.html", product=product_info)
+
+# Makita Products Page
+@app.route("/makita")
+def makita_page():
+    conn = sqlite3.connect("database/data_source.db")
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT product_id, tool_name, price, image
+        FROM product_data
+        WHERE brand = 'Makita'
+    """)
+    products = cursor.fetchall()
+    conn.close()
+
+    product_list = []
+    for p in products:
+        product_list.append({
+            "product_id": p[0],
+            "tool_name": p[1],
+            "price": float(p[2]) if p[2] else 0.00,
+            "image": p[3]
+        })
+
+    return render_template("makita.html", products=product_list)
+
+#Milwaukee
+@app.route("/milwaukee")
+def milwaukee_page():
+    conn = sqlite3.connect("database/data_source.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT product_id, brand, tool_name, price, amount_available, image
+        FROM product_data
+        WHERE brand = 'Milwaukee'
+    """)
+    products = cursor.fetchall()
+    conn.close()
+
+    # Convert tuples into dictionaries
+    product_list = [
+        {
+            "product_id": p[0],
+            "brand": p[1],
+            "tool_name": p[2],
+            "price": float(p[3]),
+            "amount_available": p[4],
+            "image": p[5]
+        } for p in products
+    ]
+
+    return render_template("milwaukee.html", products=product_list)
+
 
 @app.route("/logout")
 def logout():
