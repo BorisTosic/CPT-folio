@@ -102,24 +102,61 @@
       text-decoration: none;
       color: inherit;
     }
+
+        .makita-banner-btn:hover {
+      background-color: #007DB8; /* Darker reseda green */
+      color: white;
+    }
+
+    .milwaukee-banner-btn:hover {
+      background-color: #C8102E; /* Darker reseda green */
+      color: white;
+    }
+
+    .makita-banner-btn {
+      background-color: white;
+      color: #007DB8; /* Reseda green text */
+      padding: 8px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .milwaukee-banner-btn {
+      background-color: white;
+      color: #C8102E; /* Reseda green text */
+      padding: 8px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    
   </style>
 </head>
 <body>
 
   <!-- Banner -->
-  <div class="banner">
+    <div class="banner">
     <img src="static/images/BG_Logo.png" alt="Website Logo" class="banner-image">
-  </div>
-  <div class="banner-buttons">
-    <a href="/" class="banner-btn">Home</a>
-    <a href="#about" class="banner-btn">About</a>
-    {% if first_name %}
-      <span class="banner-btn">Welcome, {{ first_name }}!</span>
-      <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
-    {% else %}
-      <a href="sign_in.html" class="banner-btn">Sign in</a>
-    {% endif %}
-  </div>
+    </div>
+    <div class="banner-buttons">
+        <a href="/" class="banner-btn">Home</a>
+        <a href="/makita" class="makita-banner-btn">Makita</a>
+        <a href="/milwaukee" class="milwaukee-banner-btn">Milwaukee</a>
+        {% if first_name %}
+            <span class="banner-btn">Welcome, {{ first_name }}!</span>
+            <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
+        {% else %}
+            <a href="sign_in.html" class="banner-btn">Sign in</a>
+        {% endif %}
+        <a href="{{ url_for('cart') }}" class="banner-btn">Cart</a>
+    </div>
 
   <!-- Title -->
   <h1 class="page-title">Makita Tools</h1>

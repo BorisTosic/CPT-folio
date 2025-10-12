@@ -97,14 +97,20 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 <body>
 
-    <div class="banner">
-        <img src="{{ url_for('static', filename='images/BG_Logo.png') }}" alt="Website Logo" class="banner-image">
-    </div>
-
+  <div class="banner">
+    <img src="{{ url_for('static', filename='images/BG_Logo.png') }}" alt="Website Logo" class="banner-image">
+  </div>
     <div class="banner-buttons">
         <a href="/" class="banner-btn">Home</a>
-        <a href="#about" class="banner-btn">Products</a>
-        <a href="sign_in.html" class="banner-btn">Sign in</a>
+        <a href="/makita" class="makita-banner-btn">Makita</a>
+        <a href="/milwaukee" class="milwaukee-banner-btn">Milwaukee</a>
+        {% if first_name %}
+            <span class="banner-btn">Welcome, {{ first_name }}!</span>
+            <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
+        {% else %}
+            <a href="sign_in.html" class="banner-btn">Sign in</a>
+        {% endif %}
+        <a href="{{ url_for('cart') }}" class="banner-btn">Cart</a>
     </div>
 
     <div class="product-container">

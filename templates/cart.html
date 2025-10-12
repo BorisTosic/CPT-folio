@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        table {
+            width: 90%;
+            margin: 30px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+        th {
+            background-color: #f4f4f4;
+        }
+        img {
+            max-width: 80px;
+            height: auto;
+        }
+        .checkout-btn {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 30px;
+            font-size: 1rem;
+            background-color: #007DB8; /* Makita blue, change as needed */
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .checkout-btn:hover {
+            background-color: #005f8c;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Banner -->
+    <div class="banner">
+        <img src="{{ url_for('static', filename='images/BG_Logo.png') }}" alt="Website Logo" class="banner-image">
+    </div>
+    <div class="banner-buttons">
+        <a href="/" class="banner-btn">Home</a>
+        <a href="/makita" class="makita-banner-btn">Makita</a>
+        <a href="/milwaukee" class="milwaukee-banner-btn">Milwaukee</a>
+        {% if first_name %}
+            <span class="banner-btn">Welcome, {{ first_name }}!</span>
+            <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
+        {% else %}
+            <a href="sign_in.html" class="banner-btn">Sign in</a>
+        {% endif %}
+        <a href="{{ url_for('cart') }}" class="banner-btn">Cart</a>
+    </div>
+
+    <h1 style="text-align:center; margin-top:30px;">Your Shopping Cart</h1>
+
+    {% if items %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Tool Name</th>
+                    <th>Brand</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <td><img src="{{ item.image }}" alt="{{ item.tool_name }}"></td>
+                    <td>{{ item.tool_name }}</td>
+                    <td>{{ item.brand }}</td>
+                    <td>${{ "%.2f"|format(item.price) }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ "%.2f"|format(item.total_item_price) }}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td colspan="5" style="text-align:right;"><strong>Total:</strong></td>
+                    <td><strong>${{ "%.2f"|format(total_price) }}</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button class="checkout-btn">Checkout</button>
+
+    {% else %}
+        <p style="text-align:center; font-size:1.2rem; margin-top:50px;">Your cart is empty.</p>
+    {% endif %}
+
+</body>
+</html>

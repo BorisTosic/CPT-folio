@@ -152,12 +152,46 @@ nav h1 {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+.makita-banner-btn {
+  background-color: white;
+  color: #007DB8; /* Reseda green text */
+  padding: 8px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.milwaukee-banner-btn {
+  background-color: white;
+  color: #C8102E; /* Reseda green text */
+  padding: 8px 15px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
 /* Hover effect */
 .banner-btn:hover {
   background-color: #5a6b4c; /* Darker reseda green */
   color: white;
 }
 
+.makita-banner-btn:hover {
+  background-color: #007DB8; /* Darker reseda green */
+  color: white;
+}
+
+.milwaukee-banner-btn:hover {
+  background-color: #C8102E; /* Darker reseda green */
+  color: white;
+}
 
 /* SIGN IN */
 

@@ -78,14 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
         <img src="static/images/BG_Logo.png" alt="Website Logo" class="banner-image">
     </div>
     <div class="banner-buttons">
-      <a href="#home" class="banner-btn">Home</a>
-      <a href="#about" class="banner-btn">About</a>
+        <a href="/" class="banner-btn">Home</a>
+        <a href="/makita" class="makita-banner-btn">Makita</a>
+        <a href="/milwaukee" class="milwaukee-banner-btn">Milwaukee</a>
         {% if first_name %}
-    <span class="banner-btn">Welcome, {{ first_name }}!</span>
-    <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
-  {% else %}
-    <a href="sign_in.html" class="banner-btn">Sign in</a>
-  {% endif %}
+            <span class="banner-btn">Welcome, {{ first_name }}!</span>
+            <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
+        {% else %}
+            <a href="sign_in.html" class="banner-btn">Sign in</a>
+        {% endif %}
+        <a href="{{ url_for('cart') }}" class="banner-btn">Cart</a>
+    </div>
     </div>
 <!-- Product Carousel -->
 <div class="carousel-container">
