@@ -64,6 +64,9 @@ def index():
 # Product Page
 @app.route("/product/<int:product_id>")
 def product_page(product_id):
+    import sqlite3
+    from flask import session
+
     conn = sqlite3.connect("database/data_source.db")
     cursor = conn.cursor()
 
@@ -72,24 +75,174 @@ def product_page(product_id):
         FROM product_data
         WHERE product_id = ?
     """, (product_id,))
-    
     product = cursor.fetchone()
-    conn.close()
 
     if not product:
+        conn.close()
         return f"<h1>Product {product_id} not found.</h1>", 404
 
-    # Convert tuple to dictionary for easier use in HTML
     product_info = {
         "product_id": product[0],
         "brand": product[1],
         "tool_name": product[2],
-        "price": float(product[3]),  # turns into float
+        "price": float(product[3]) if product[3] is not None else 0.0,
         "amount_available": product[4],
         "image": product[5]
     }
 
-    return render_template("product.html", product=product_info)
+    # Check if user already has this product in their cart
+    existing_quantity = 0
+    if "phone" in session:
+        user_phone = session["phone"]
+        cursor.execute("""
+            SELECT quantity FROM order_data
+            WHERE user_number = ? AND product = ?
+        """, (user_phone, product_id))
+        result = cursor.fetchone()
+        if result:
+            existing_quantity = result[0]
+
+    conn.close()
+    return render_template("product.html", product=product_info, existing_quantity=existing_quantity)
+
+# Add to cart but its add to the order table mb
+@app.route("/add_to_cart", methods=["POST"])
+def add_to_cart():
+    import sqlite3
+    from flask import session, request, jsonify
+
+    if "phone" not in session:
+        return jsonify({"status": "not_signed_in"})
+
+    data = request.get_json()
+    product_id = int(data.get("product_id"))
+    quantity = int(data.get("quantity"))
+    user_phone = session["phone"]
+
+    conn = sqlite3.connect("database/data_source.db")
+    cursor = conn.cursor()
+
+    # 1️ Get available stock
+    cursor.execute("SELECT amount_available FROM product_data WHERE product_id = ?", (product_id,))
+    product = cursor.fetchone()
+    if not product:
+        conn.close()
+        return jsonify({"status": "product_not_found"})
+
+    available = product[0]
+
+    # 2️ Get existing quantity in cart (if there is any)
+    cursor.execute("""
+        SELECT quantity FROM order_data
+        WHERE user_number = ? AND product = ?
+    """, (user_phone, product_id))
+    existing = cursor.fetchone()
+
+    if existing:
+        old_quantity = existing[0]
+        diff = quantity - old_quantity  # positive if increasing, negative if reducing
+
+        # Prevent over-ordering
+        if diff > available:
+            conn.close()
+            return jsonify({"status": "exceeds_stock"})
+
+        # 3️ Update order quantity
+        cursor.execute("""
+            UPDATE order_data
+            SET quantity = ?
+            WHERE user_number = ? AND product = ?
+        """, (quantity, user_phone, product_id))
+
+        # 4️ Update stock correctly
+        new_available = available - diff
+        cursor.execute("""
+            UPDATE product_data
+            SET amount_available = ?
+            WHERE product_id = ?
+        """, (new_available, product_id))
+
+        conn.commit()
+        conn.close()
+        return jsonify({"status": "updated", "remaining": new_available})
+
+    else:
+        # 5️ New cart entry
+        if quantity > available:
+            conn.close()
+            return jsonify({"status": "exceeds_stock"})
+
+        cursor.execute("""
+            INSERT INTO order_data (user_number, product, quantity)
+            VALUES (?, ?, ?)
+        """, (user_phone, product_id, quantity))
+
+        # 6️ Update available stock
+        new_available = available - quantity
+        cursor.execute("""
+            UPDATE product_data
+            SET amount_available = ?
+            WHERE product_id = ?
+        """, (new_available, product_id))
+
+        conn.commit()
+        conn.close()
+        return jsonify({"status": "added", "remaining": new_available})
+
+# REMOVE FROM CAT BUTTON
+@app.route("/remove_from_cart", methods=["POST"])
+def remove_from_cart():
+    import sqlite3
+    from flask import session, request, jsonify
+
+    if "phone" not in session:
+        return jsonify({"status": "not_signed_in"})
+
+    data = request.get_json()
+    product_id = int(data.get("product_id"))
+    user_phone = session["phone"]
+
+    conn = sqlite3.connect("database/data_source.db")
+    cursor = conn.cursor()
+
+    # 1️ Get the quantity currently in cart
+    cursor.execute("""
+        SELECT quantity FROM order_data
+        WHERE user_number = ? AND product = ?
+    """, (user_phone, product_id))
+    existing = cursor.fetchone()
+
+    if not existing:
+        conn.close()
+        return jsonify({"status": "not_in_cart"})
+
+    quantity_in_cart = existing[0]
+
+    # 2️ Delete from order_data
+    cursor.execute("""
+        DELETE FROM order_data
+        WHERE user_number = ? AND product = ?
+    """, (user_phone, product_id))
+
+    # 3 Update available stock
+    cursor.execute("""
+        SELECT amount_available FROM product_data
+        WHERE product_id = ?
+    """, (product_id,))
+    available = cursor.fetchone()[0] or 0
+
+    new_available = available + quantity_in_cart
+    cursor.execute("""
+        UPDATE product_data
+        SET amount_available = ?
+        WHERE product_id = ?
+    """, (new_available, product_id))
+
+    conn.commit()
+    conn.close()
+
+    return jsonify({"status": "removed", "remaining": new_available})
+
 
 # Makita Products Page
 @app.route("/makita")

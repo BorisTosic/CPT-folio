@@ -480,5 +480,38 @@ nav h1 {
     }
 }
 
+/* ADD TO CART BUTTONS */
 
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
 
+.quantity-btn {
+    background-color: #007DB8; /* Makita Blue */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 18px;
+    transition: background-color 
+}
+
+/* REMOVE FROM CART */
+.remove-btn {
+    background-color: red;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.remove-btn:hover {
+    background-color: darkred;
+}

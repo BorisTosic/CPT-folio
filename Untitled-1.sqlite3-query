@@ -1,0 +1,3 @@
+-- database: ./database/data_source.db
+
+SELECT * FROM order_data;

@@ -6,6 +6,95 @@
     <title>{{ product.tool_name }} | {{ product.brand }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    const decreaseBtn = document.getElementById("decreaseQty");
+    const increaseBtn = document.getElementById("increaseQty");
+    const quantityDisplay = document.getElementById("quantityValue");
+    const buyBtn = document.getElementById("buyBtn");
+
+    let quantity = {{ existing_quantity if existing_quantity else 1 }};
+    const maxQuantity = {{ product.amount_available }};
+
+    // Initialize display
+    quantityDisplay.textContent = quantity;
+
+    if ({{ existing_quantity|default(0) }} > 0) {
+        buyBtn.textContent = "Update";
+        buyBtn.style.backgroundColor = "green";
+    }
+
+    decreaseBtn.addEventListener("click", () => {
+        if (quantity > 1) {
+            quantity--;
+            quantityDisplay.textContent = quantity;
+        }
+    });
+
+    increaseBtn.addEventListener("click", () => {
+        if (quantity < maxQuantity) {
+            quantity++;
+            quantityDisplay.textContent = quantity;
+        } else {
+            alert("You cannot order more than the available stock (" + maxQuantity + ").");
+        }
+    });
+
+    buyBtn.addEventListener("click", async () => {
+        const productId = {{ product.product_id }};
+        const response = await fetch("/add_to_cart", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ product_id: productId, quantity: quantity })
+        });
+
+        const data = await response.json();
+
+        if (data.status === "added" || data.status === "updated") {
+            //  Change button text and color
+            buyBtn.textContent = "Update";
+            buyBtn.style.backgroundColor = "green";
+
+            // Update amount available
+            if (data.remaining !== undefined) {
+                document.getElementById("amount-available").textContent = data.remaining;
+                maxQuantity = data.remaining;
+            }
+        } else if (data.status === "not_signed_in") {
+            alert("Please sign in to add items to your cart.");
+        } else if (data.status === "exceeds_stock") {
+            alert("Not enough stock available.");
+        }
+    });
+    const removeBtn = document.getElementById("removeBtn");
+
+    removeBtn.addEventListener("click", async () => {
+        const productId = {{ product.product_id }};
+        const response = await fetch("/remove_from_cart", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ product_id: productId })
+        });
+
+        const data = await response.json();
+
+        if (data.status === "removed") {
+            buyBtn.textContent = "Buy Now";
+            buyBtn.style.backgroundColor = ""; // reset to default
+            document.getElementById("amount-available").textContent = data.remaining;
+            quantity = 1;
+            quantityDisplay.textContent = quantity;
+            alert("Item removed from cart.");
+        } else {
+            alert("Error removing item from cart.");
+        }
+    });
+});
+</script>
 <body>
 
     <div class="banner">
@@ -23,13 +112,24 @@
             <img src="{{ product.image }}" alt="{{ product.tool_name }}">
         </div>
 
-        <div class="product-info">
+        <div class="product-info" style="text-align: left;">
             <h1>{{ product.tool_name }}</h1>
             <h2>Brand: {{ product.brand }}</h2>
             <p><strong>Price:</strong> ${{ "%.2f"|format(product.price) }}</p>
-            <p><strong>Available:</strong> {{ product.amount_available }}</p>
+            <p><strong>Available:</strong> <span id="amount-available">{{ product.amount_available }}</span></p>
 
-            <button class="buy-btn">Buy Now</button>
+            <div class="quantity-selector">
+                <button class="quantity-btn" id="decreaseQty">-</button>
+                &nbsp;&nbsp;&nbsp;
+                <span id="quantityValue">1</span>
+                &nbsp;&nbsp;&nbsp;
+                <button class="quantity-btn" id="increaseQty">+</button>
+            </div>
+            <br>
+            <div>
+                <button class="buy-btn" id="buyBtn">Buy Now</button>
+                <button class="remove-btn" id="removeBtn">Remove from Cart</button>
+            </div>
         </div>
     </div>
 
