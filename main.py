@@ -432,6 +432,64 @@ def cart():
 
     return render_template("cart.html", items=items, total_price=total_price, first_name=session.get("first_name"))
 
+#CHECKOUT
+@app.route("/checkout", methods=["POST"])
+def checkout():
+    import sqlite3
+    from flask import session, request, jsonify
+    from datetime import datetime
+
+    if "phone" not in session:
+        return jsonify({"status": "error", "message": "Not signed in"})
+
+    data = request.get_json()
+    user_phone = session["phone"]
+    
+    card_number = data.get("card_number")
+    expiry_date = data.get("expiry_date")
+    cvv = data.get("cvv")
+    total_price = data.get("total_price")
+
+    conn = sqlite3.connect("database/data_source.db")
+    cursor = conn.cursor()
+
+    # Get customer name
+    cursor.execute("""
+        SELECT first_name, last_name FROM Customer_Data WHERE phone = ?
+    """, (user_phone,))
+    customer = cursor.fetchone()
+    
+    if not customer:
+        conn.close()
+        return jsonify({"status": "error", "message": "Customer not found"})
+    
+    first_name, last_name = customer
+
+    # Get current date and time
+    date_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    # Insert into invoice table
+    try:
+        cursor.execute("""
+            INSERT INTO invoice (phone, first_name, last_name, total_price, card_number, cvv, expiry_date, date_time)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """, (user_phone, first_name, last_name, total_price, card_number, cvv, expiry_date, date_time))
+
+        # Clear the user's cart after successful checkout
+        cursor.execute("""
+            DELETE FROM order_data WHERE user_number = ?
+        """, (user_phone,))
+
+        conn.commit()
+        conn.close()
+
+        return jsonify({"status": "success", "message": "Order placed successfully"})
+    
+    except Exception as e:
+        conn.close()
+        print(f"Error during checkout: {e}")
+        return jsonify({"status": "error", "message": str(e)})
+
 
 @app.route("/logout")
 def logout():
@@ -456,10 +514,16 @@ def login():
 
     if check_login(phone, password):
         session["phone"] = phone
-        session["first_name"] = get_first_name(phone)  #store first name
+        session["first_name"] = get_first_name(phone)  # store first name
         return redirect(url_for("home"))
     else:
-        print ('invalid login')
+        # Invalid login — show popup and redirect
+        return """
+            <script>
+                alert("Invalid phone number or password. Please try again.");
+                window.location.href = '/sign_in.html';
+            </script>
+        """
 
 
 @app.route("/signup", methods=["POST"])
@@ -474,10 +538,24 @@ def signup():
     suburb = request.form["suburb"]
     state = request.form["state"]
 
-    
     conn = sqlite3.connect("database/data_source.db")
     cursor = conn.cursor()
-    
+
+    # Check if phone already exists
+    cursor.execute("SELECT 1 FROM Customer_Data WHERE phone = ?", (phone,))
+    existing_user = cursor.fetchone()
+
+    if existing_user:
+        conn.close()
+        # Return a popup alert, then redirect to sign-in
+        return """
+            <script>
+                alert("This phone number is already registered. Please sign in instead.");
+                window.location.href = '/sign_in.html';
+            </script>
+        """
+
+    # Insert new user
     cursor.execute("""
         INSERT INTO Customer_Data 
         (first_name, last_name, phone, password, street_number, street_name, street_suffix, suburb, state)
@@ -486,14 +564,19 @@ def signup():
 
     conn.commit()
     conn.close()
-    
 
     # Auto-login
     session["phone"] = phone
     session["first_name"] = first_name
 
-    flash("Account created successfully!", "success")
-    return redirect(url_for("home"))
+    # Success popup before redirecting home
+    return """
+        <script>
+            alert("Account created successfully!");
+            window.location.href = '/';
+        </script>
+    """
+
 
 if __name__ == '__main__':
   app.run(debug=True, host='0.0.0.0', port=5000)

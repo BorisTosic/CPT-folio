@@ -14,7 +14,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const buyBtn = document.getElementById("buyBtn");
 
     let quantity = {{ existing_quantity if existing_quantity else 1 }};
-    const maxQuantity = {{ product.amount_available }};
+    let maxQuantity = {{ product.amount_available }};
+
 
     // Initialize display
     quantityDisplay.textContent = quantity;
@@ -107,10 +108,10 @@ document.addEventListener("DOMContentLoaded", () => {
         {% if first_name %}
             <span class="banner-btn">Welcome, {{ first_name }}!</span>
             <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
+            <a href="{{ url_for('cart') }}" class="banner-btn">Cart</a>
         {% else %}
-            <a href="sign_in.html" class="banner-btn">Sign in</a>
+            <a href="/sign_in.html" class="banner-btn">Sign in</a>
         {% endif %}
-        <a href="{{ url_for('cart') }}" class="banner-btn">Cart</a>
     </div>
 
     <div class="product-container">

@@ -84,12 +84,13 @@ document.addEventListener('DOMContentLoaded', () => {
         {% if first_name %}
             <span class="banner-btn">Welcome, {{ first_name }}!</span>
             <a href="{{ url_for('logout') }}" class="banner-btn">Logout</a>
+            <a href="{{ url_for('cart') }}" class="banner-btn">Cart</a>
         {% else %}
             <a href="sign_in.html" class="banner-btn">Sign in</a>
         {% endif %}
-        <a href="{{ url_for('cart') }}" class="banner-btn">Cart</a>
     </div>
     </div>
+<h2 style="text-align:center; font-size:2rem; margin-top:40px;">You may like</h2>
 <!-- Product Carousel -->
 <div class="carousel-container">
   <button class="carousel-btn prev">&#10094;</button>
@@ -108,6 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   <button class="carousel-btn next">&#10095;</button>
 </div>
+<h2 style="text-align:center; font-size:2rem; margin-top:40px;">Brands</h2>
 <!-- Brands Section -->
 <div class="brands-section">
     <div class="brand-half makita" onclick="window.location.href='makita'">
