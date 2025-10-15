@@ -34,7 +34,7 @@ The code should be uncluttered and free of any bugs
 
 ## Week 2 simple wireframe
 ---
-![Colour pallet](images/palet.png)
+![Colour pallet](static/images/palet.png)
 *This is going to be my prefered colour scheme for my website*
 
 The colours include<br>
@@ -44,7 +44,7 @@ F5F5F5 - White Smoke<br>
 0C0C0C - Night (black)<br>
 6C7D47 - Reseda Green
 
-![paper wireframe](images/Wireframe.png)
+![paper wireframe](static/images/Wireframe.png)
 *This was my first wireframe that I drew on paper*
 
 I will be using a basic font such as a thick roboto for my subheadings, I would use a  thinner version for the user input appearing on the screen.<br>
@@ -56,7 +56,7 @@ I will use images mainly as icons to show the user what they are buying so that 
 [Interactive Figma WIreframe](https://www.figma.com/proto/OnFVapV77fbgHP9KciOt3H/Wireframe-7KM?node-id=0-1&t=n5xVGcwnucpyeyWG-1)
 
 ### Logo
-![Logo](images/Logo.png)
+![Logo](static/images/Logo.png)
 
 *My prompt to get the Logo for Copilot AI:*
 Can you make a logo for a  hardware store called 7KM in which the 7 looks like an impact drill. Can the main colours be 8D4F42 and the secondary colour be 6C7D42. can the outline be 0C0C0C and have a little bit of 38305F and F5F5F5
@@ -87,7 +87,7 @@ Sent to a thank you for shopping with us page<br>
 If declined<br>
 The user gets sent back to the checkout page with the information still filled out so that if there were any mistakes made in the process they can be fixed<br>
 
-![Flowchart](images/algorithm_flowchart.png)
+![Flowchart](static/images/algorithm_flowchart.png)
 
 ### Flowchart analysation
 
@@ -110,8 +110,8 @@ My algorithm isn't overly complicated so it should scale well as the business gr
 - Make sure that all the items appear with the correct quantities<br>
 
 **Expected Result:** The user has all the items in the correct quantity in their cart<br>
-**Actual Result:** To be filled after execution.<br>
-**Pass/Fail:** To be filled after execution.<br>
+**Actual Result:** all items appear in thier correct quantities in the cart, even if they were to log out and another user logs on in the meantime. <br>
+**Pass/Fail:** Pass<br>
 **Priority:** High
 
 **Test Case ID:** TC-02<br>
@@ -125,8 +125,8 @@ My algorithm isn't overly complicated so it should scale well as the business gr
 - Repeat with invalid information and see if you get redirected back to the checkout page<br>
 
 **Expected Result:** payment goes through if valid, and redirected back to checkout if invalid<br>
-**Actual Result:** To be filled after execution.<br>
-**Pass/Fail:** To be filled after execution.<br>
+**Actual Result:** payment works as intended<br>
+**Pass/Fail:** Pass<br>
 **Priority:** medium to high
 
 ## Week 5 & 6
@@ -153,3 +153,27 @@ My algorithm isn't overly complicated so it should scale well as the business gr
 - I got the phone number and first name of the user save so the person was actually logged in
 - I got a welcome, (name of user) into my banner
 - I got a log out functionality
+
+## 1st Week of holidays
+- This Week I Designed my home page
+- I had at the top of the page an image carousel of some of the products, even thought they were only milwaukee products
+- I also added at the bottom two large buttons one for makita and one for Milwaukee that lead to each brand's respective product page
+- I made a page for both Makita aand Milwakee that displayed all of the products from their brands
+- After clicking on the product you got sent to a product page that of making all of them individually i made a single page that pulls information from my product_data table
+
+## 2nd Week of holidays
+- This week I created my online order system. I added a quantity picker button underneath the availability
+- When the user clicks the buy now button it decreases the amount available in the product_data database by the desired quantity, and it adds the product along with the quantity and the phone number of the user to the order_data table. the button then turns green and invites the user to update the quantity, or alternatively the user can click on the remove from cart button.
+- For every new product a user orders it adds a new row to the database. The benefits of this is that the user can log our, login in as another user, and add to their cart, and their carts would be completely seperate.
+- The user can checkout by firsly clicking the cart button. This page displays all of the products linked to the user's phone number and relvant information to the user and shows a total cost and also has buttons to modify or remove the item.
+- When the user clicks checkout there is a card informationform, there is no processing of information as it only checks for correct formatting it assumes that the payment went through and the account is real.
+- When the user clicks on confirm order and the information is correctly formatted, a new row is created in the invoice table and it inlcludes your phone number, full name, total cost, card information and the date and time of the order confirmation.
+- Throughout this process I had issues with bugs, so I used online tools to help me resolve them
+
+## 1st Week of Term 4 / Polishing touches
+- On monday I standerdised the banner buttons for all the pages except for the sign in and sign up
+- I also made sure that you need to have a unique phone number to make a new account
+- After my meeting with Joshua I have made some minor improvements such as labels for the products on the image carousel, as well as ensuring correct formatting for the sign up page, e.g. not having letters in the phone number
+
+## User Instructions
+I dont have many instructions as the website is easy to navigate, however I would reccomend signing up and making your own account as you would be redirected there if you try to add items to your cart. From there you should try add a few items, customise the quantity, update the quantity, and remove the items. Furthermoore you should insert incorrectly formatted inputs.

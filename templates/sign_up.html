@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
+    <title>Sign Up</title>
     <link rel="stylesheet" href="static/css/style.css">
 </head>
 <body>
@@ -15,21 +15,29 @@
       <a href="sign_in.html" class="banner-btn">Sign in</a>
     </div>
 
-    <!--  NEW SIGN-UP FORM START -->
     <div class="sign-up-container">
         <h2>Create an Account</h2>
-        <form action="/signup" method="POST">
+        <form action="/signup" method="POST" id="signupForm">
             <!-- First and Last Name -->
-            <input type="text" name="first_name" placeholder="First Name" required>
-            <input type="text" name="last_name" placeholder="Last Name" required>
+            <input type="text" name="first_name" id="first_name" placeholder="First Name" required 
+                   pattern="[A-Za-z\s]+" title="Only letters and spaces allowed">
+            <input type="text" name="last_name" id="last_name" placeholder="Last Name" required 
+                   pattern="[A-Za-z\s]+" title="Only letters and spaces allowed">
+            
             <!-- Phone & Password -->
-            <input type="text" name="phone" placeholder="Phone Number" required>
-            <input type="password" name="password" placeholder="Password" required>
-            <!-- Address Stuff -->
-            <input type="text" name="street_number" placeholder="Street Number" required>
-            <input type="text" name="street_name" placeholder="Street Name" required>
-            <input type="text" name="street_suffix" placeholder="Street Suffix (e.g. St, Rd, Ave)" required>
+            <input type="tel" name="phone" id="phone" placeholder="Phone Number (04XX XXX XXX)" required 
+                   pattern="04\d{2}\s?\d{3}\s?\d{3}" title="Must be 10 digits starting with 04 (e.g., 0412 345 678)">
+            <input type="password" name="password" placeholder="Password" required minlength="6">
+            
+            <!-- Address -->
+            <input type="text" name="street_number" id="street_number" placeholder="Street Number" required 
+                   pattern="\d+" title="Only numbers allowed">
+            <input type="text" name="street_name" id="street_name" placeholder="Street Name" required 
+                   pattern="[A-Za-z\s]+" title="Only letters and spaces allowed">
+            <input type="text" name="street_suffix" id="street_suffix" placeholder="Street Suffix (e.g. St, Rd, Ave)" required 
+                   pattern="[A-Za-z\s]+" title="Only letters and spaces allowed">
             <input type="text" name="suburb" placeholder="Suburb" required>
+            
             <!-- States & Territories Dropdown -->
             <select name="state" required>
                 <option value="" disabled selected>Select State/Territory</option>
@@ -42,11 +50,66 @@
                 <option value="ACT">Australian Capital Territory</option>
                 <option value="NT">Northern Territory</option>
             </select>
-            <!-- Submit Button -->
+            
             <button type="submit">Sign Up</button>
         </form>
 
-        <!-- Link Back to Sign In -->
         <p>Already have an account? <a href="sign_in.html">Sign in here</a></p>
+    </div>
+
+    <script>
+        // Format phone number as user types
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, ''); // Remove spaces
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            
+            // Format as 04XX XXX XXX
+            if (value.length > 4 && value.length <= 7) {
+                value = value.slice(0, 4) + ' ' + value.slice(4);
+            } else if (value.length > 7) {
+                value = value.slice(0, 4) + ' ' + value.slice(4, 7) + ' ' + value.slice(7);
+            }
+            
+            e.target.value = value;
+        });
+
+        // Prevent non-letters in name fields
+        ['first_name', 'last_name', 'street_name', 'street_suffix'].forEach(id => {
+            document.getElementById(id).addEventListener('keypress', function(e) {
+                const char = String.fromCharCode(e.keyCode || e.which);
+                if (!/[A-Za-z\s]/.test(char)) {
+                    e.preventDefault();
+                }
+            });
+        });
+
+        // Prevent non-numbers in street number
+        document.getElementById('street_number').addEventListener('keypress', function(e) {
+            const char = String.fromCharCode(e.keyCode || e.which);
+            if (!/\d/.test(char)) {
+                e.preventDefault();
+            }
+        });
+
+        // Additional validation on form submit
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            const phone = document.getElementById('phone').value.replace(/\s/g, '');
+            
+            // Check phone format
+            if (!/^04\d{8}$/.test(phone)) {
+                e.preventDefault();
+                alert('Phone number must be 10 digits starting with 04');
+                return false;
+            }
+
+            // Trim whitespace from all text inputs
+            const textInputs = this.querySelectorAll('input[type="text"], input[type="tel"]');
+            textInputs.forEach(input => {
+                input.value = input.value.trim();
+            });
+        });
+    </script>
 </body>
 </html>

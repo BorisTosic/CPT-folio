@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request, session, redirect, url_for, flash
 import sqlite3
 import hashlib
+import re
 
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
@@ -45,16 +46,22 @@ def home():
     conn = sqlite3.connect("database/data_source.db")
     cursor = conn.cursor()
     
-    # Grab up to 7 products that have images
-    cursor.execute("SELECT product_id, image FROM product_data WHERE image IS NOT NULL LIMIT 7")
+    cursor.execute("""
+        SELECT product_id, image, brand, tool_name, price 
+        FROM product_data 
+        WHERE image IS NOT NULL 
+        LIMIT 7
+    """)
+    
     products = cursor.fetchall()
     conn.close()
 
     return render_template(
-        "index.html", 
-        first_name=session.get("first_name"), 
+        "index.html",
+        first_name=session.get("first_name"),
         products=products
     )
+
 
 @app.route('/index.html', methods=['GET'])
 @app.route('/', methods=['POST', 'GET'])
@@ -528,15 +535,54 @@ def login():
 
 @app.route("/signup", methods=["POST"])
 def signup():
-    first_name = request.form["first_name"]
-    last_name = request.form["last_name"]
-    phone = request.form["phone"]
-    password = request.form["password"]
-    street_number = request.form["street_number"]
-    street_name = request.form["street_name"]
-    street_suffix = request.form["street_suffix"]
-    suburb = request.form["suburb"]
-    state = request.form["state"]
+    # Get form data
+    first_name = request.form.get("first_name", "").strip()
+    last_name = request.form.get("last_name", "").strip()
+    phone = request.form.get("phone", "").strip().replace(" ", "")  # Remove spaces
+    password = request.form.get("password", "")
+    street_number = request.form.get("street_number", "").strip()
+    street_name = request.form.get("street_name", "").strip()
+    street_suffix = request.form.get("street_suffix", "").strip()
+    suburb = request.form.get("suburb", "").strip()
+    state = request.form.get("state", "")
+
+    # Server-side validation
+    errors = []
+
+    # Validate first and last names (only letters and spaces)
+    if not re.match(r'^[A-Za-z\s]+$', first_name):
+        errors.append("First name can only contain letters and spaces")
+    if not re.match(r'^[A-Za-z\s]+$', last_name):
+        errors.append("Last name can only contain letters and spaces")
+
+    # Validate phone (10 digits starting with 04)
+    if not re.match(r'^04\d{8}$', phone):
+        errors.append("Phone number must be 10 digits starting with 04")
+
+    # Validate street number (only digits)
+    if not re.match(r'^\d+$', street_number):
+        errors.append("Street number can only contain numbers")
+
+    # Validate street name and suffix (only letters and spaces)
+    if not re.match(r'^[A-Za-z\s]+$', street_name):
+        errors.append("Street name can only contain letters and spaces")
+    if not re.match(r'^[A-Za-z\s]+$', street_suffix):
+        errors.append("Street suffix can only contain letters and spaces")
+
+    # Check if all required fields are present
+    if not all([first_name, last_name, phone, password, street_number, 
+                street_name, street_suffix, suburb, state]):
+        errors.append("All fields are required")
+
+    # If there are validation errors, return them
+    if errors:
+        error_message = "\\n".join(errors)
+        return f"""
+            <script>
+                alert("{error_message}");
+                window.history.back();
+            </script>
+        """
 
     conn = sqlite3.connect("database/data_source.db")
     cursor = conn.cursor()
@@ -547,7 +593,6 @@ def signup():
 
     if existing_user:
         conn.close()
-        # Return a popup alert, then redirect to sign-in
         return """
             <script>
                 alert("This phone number is already registered. Please sign in instead.");
@@ -558,9 +603,11 @@ def signup():
     # Insert new user
     cursor.execute("""
         INSERT INTO Customer_Data 
-        (first_name, last_name, phone, password, street_number, street_name, street_suffix, suburb, state)
+        (first_name, last_name, phone, password, street_number, street_name, 
+         street_suffix, suburb, state)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    """, (first_name, last_name, phone, password, street_number, street_name, street_suffix, suburb, state))
+    """, (first_name, last_name, phone, password, street_number, street_name, 
+          street_suffix, suburb, state))
 
     conn.commit()
     conn.close()

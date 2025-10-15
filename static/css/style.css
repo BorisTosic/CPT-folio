@@ -348,8 +348,8 @@ nav h1 {
 /* ---- Carousel ---- */
 .carousel-container {
   position: relative;
-  width: 80%;
-  max-width: 1000px;
+  width: 64%; /* 80% of 80% */
+  max-width: 800px;
   margin: 40px auto;
   overflow: hidden;
 }
@@ -364,22 +364,46 @@ nav h1 {
   align-items: center;
 }
 
-/* Force each slide to same size */
 .slide {
-  flex: 0 0 70%;    /* main image takes 70% of viewport */
-  margin: 0 15px;   /* spacing for side peeking */
+  flex: 0 0 56%;  /* 80% of 70% */
+  margin: 0 12px; /* smaller margins */
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .slide img {
   width: 100%;
-  height: 400px;       /* fixed height */
-  object-fit: cover;   /* keeps aspect ratio, crops if needed */
+  height: 320px;  /* 80% of 400px */
+  object-fit: cover;
   border-radius: 10px;
   box-shadow: 0 6px 12px rgba(0,0,0,0.2);
 }
 
+/* Text underneath images */
+.product-info {
+  text-align: center;
+  margin-top: 8px;
+}
+
+.product-info .brand {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.product-info .tool-name {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 2px;
+}
+
+.product-info .price {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+/* Carousel navigation buttons */
 .carousel-btn {
   position: absolute;
   top: 50%;
@@ -387,12 +411,12 @@ nav h1 {
   background: rgba(0,0,0,0.6);
   color: #fff;
   border: none;
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   cursor: pointer;
   z-index: 20;
-  font-size: 20px;
+  font-size: 18px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -400,6 +424,7 @@ nav h1 {
 
 .carousel-btn.prev { left: 10px; }
 .carousel-btn.next { right: 10px; }
+
 
 /* Product Page*/
 .product-container {
