@@ -177,3 +177,10 @@ My algorithm isn't overly complicated so it should scale well as the business gr
 
 ## User Instructions
 I dont have many instructions as the website is easy to navigate, however I would reccomend signing up and making your own account as you would be redirected there if you try to add items to your cart. From there you should try add a few items, customise the quantity, update the quantity, and remove the items. Furthermoore you should insert incorrectly formatted inputs.
+
+## Acknowledgement 
+- I used online resources such as Claude And ChatGPT to help me with debugging, fixing errors and modification of code. I deigned the flow of the website completely by myself, including the relationships with the databases and the inteded use of all of the features, however I used AI to help me the styling.
+- I used images from total tools, konnect fastening systems, Amazon, Sydney Tools, Mitre 10, and I used Copilot to generate the image logo.
+
+## Lighthouse Report
+![Lighthouse Report](static/images/lighthouse.png)
